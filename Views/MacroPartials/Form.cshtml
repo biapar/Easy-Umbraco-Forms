@@ -193,7 +193,7 @@
             @foreach (PropertyType pt in pg.PropertyTypes.OrderBy(x => x.SortOrder))
             {
                 var fieldName = pt.Alias + pt.Id;
-
+                string requiredStar = "";
                 // javascript validation
 
                 if (pt.Mandatory || !string.IsNullOrEmpty(pt.ValidationRegExp))
@@ -208,6 +208,7 @@
                     if (pt.Mandatory)
                     {
                         sbRules.Append("required: true");
+                        requiredStar = "*";
                     }
                     if (pt.Mandatory && !string.IsNullOrEmpty(pt.ValidationRegExp))
                     {
@@ -234,7 +235,7 @@
                     else
                     {
                         // label
-                        <label for="@fieldName" class="control-label ">@pt.Name :</label>
+                        <label for="@fieldName" class="control-label ">@pt.Name@requiredStar :</label>
 
                         <div class="">
 
@@ -266,6 +267,10 @@
                             {
                                 @TextBox(pt.Name, fieldName, "datetime-local")
                             }
+                            else if (pt.PropertyEditorAlias == "Umbraco.EmailAddress")
+                                {
+                                    @TextBox(pt.Name, fieldName, "email")
+                                }
                             else
                             {
                                 @TextBox(pt.Name, fieldName, "text")
